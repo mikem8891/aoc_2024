@@ -6,7 +6,7 @@ fn solve(input: &str) -> (impl Display, impl Display) {
   let mut id_list_1 = vec!();
   let mut id_list_2 = vec!();
   for line in input.lines() {
-    let mut ids = line.split(' ').filter_map(|s| s.parse::<u64>().ok());
+    let mut ids = line.split("   ").filter_map(|s| s.parse::<u64>().ok());
     id_list_1.push(ids.next().expect("1st ID"));
     id_list_2.push(ids.next().expect("2nd ID"));
   }
