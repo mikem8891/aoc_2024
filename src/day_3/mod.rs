@@ -1,9 +1,8 @@
-const DAY_NUM: &str = "2";
+const DAY_NUM: &str = "3";
 
 use std::fmt::Display;
 
 fn solve(input: &str) -> (impl Display, impl Display) {
-    
     ("todo", "todo")
 }
 
