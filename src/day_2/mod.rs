@@ -28,9 +28,9 @@ fn is_safe_2(levels: &Vec<i64>) -> bool {
         true
     } else {
         let len = levels.len();
-        for i in 1..=len {
-            let mut dampened = Vec::from(&levels[0..(i - 1)]);
-            dampened.extend_from_slice(&levels[i..len]);
+        for i in 0..len {
+            let mut dampened = Vec::from(&levels[0..i]);
+            dampened.extend_from_slice(&levels[(i + 1)..len]);
             if is_safe_1(&dampened) {
                 return true
             }
