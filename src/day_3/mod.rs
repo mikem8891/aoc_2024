@@ -3,6 +3,25 @@ const DAY_NUM: &str = "3";
 use std::fmt::Display;
 
 fn solve(input: &str) -> (impl Display, impl Display) {
+
+    let len = input.len();
+    let mut i = 0;
+
+    loop {
+        let sub_str = &input[i..];
+        if let Some(is) = sub_str.find("mul(") {
+            let sub_str = &input[is..];
+            if let Some(ie) = &sub_str[0..12].find(')') {
+                let mut args = &sub_str[4..*ie].split(',');
+                let args = (*args.next(), args.next());
+                match args {
+                    (Some(s1), Some(s2)) => {},
+                    _ => break
+                }
+            } else {break}
+        } else {break}
+    }
+
     ("todo", "todo")
 }
 
