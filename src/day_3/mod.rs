@@ -2,6 +2,21 @@ const DAY_NUM: &str = "3";
 
 use std::fmt::Display;
 
+struct Args {
+    input: &str,
+    i: usize
+}
+
+impl Iterator for Args {
+    
+    type Item = Option<(u32,u32)>;
+    
+    fn next(&mut self) -> Option<(u32,u32)> {
+        
+        None
+    }
+}
+
 fn solve(input: &str) -> (impl Display, impl Display) {
 
     let len = input.len();
