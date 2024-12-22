@@ -2,7 +2,17 @@ const DAY_NUM: &str = "4";
 
 use std::fmt::Display;
 
+const XMAS_FORWARD = 
+"
+XMAS
+";
+
+
+
 fn solve(input: &str) -> (impl Display, impl Display) {
+    let word_search: Vec<_> = input.lines().map(str::as_bytes).collect();
+    
+    
     ("todo", "todo")
 }
 
