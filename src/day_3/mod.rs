@@ -12,7 +12,17 @@ impl Iterator for Args {
     type Item = Option<(u32,u32)>;
     
     fn next(&mut self) -> Option<(u32,u32)> {
-        
+        loop {
+            self.i = match &input[self.i..].find("mul(") {
+                Some(i) => i + 4,
+                _ => return None
+            }
+            let args = match &input[self.i..][..8].find(')') {
+                Some(i) => &input[self.i..][..i],
+                _ => continue
+            };
+            
+        }
         None
     }
 }
