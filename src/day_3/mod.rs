@@ -17,12 +17,23 @@ impl Iterator for Args {
                 Some(i) => i + 4,
                 _ => return None
             }
-            let args = match &input[self.i..][..8].find(')') {
-                Some(i) => &input[self.i..][..i],
+            let args_str = match &input[self.i..][..8].find(')') {
+                Some(i) => &input[self.i..][..i].split_once(','),
                 _ => continue
             };
-            
-        }
+            let args_num = match args_str {
+                Some((s1, s2)) => {
+                    let n1 = s1.parse::<u32>();
+                    let n2 = s2.parse::<u32>();
+                    (n1, n2)
+                },
+                _ => continue
+            }
+            match args_num {
+                (Ok(n1), Ok(n2)) => (n1, n2),
+                _ => continue
+            }
+        }   
         None
     }
 }
