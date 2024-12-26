@@ -17,8 +17,8 @@ impl<'a> Iterator for Args<'a> {
                 Some(i) => i + 4,
                 _ => return None
             };
-            let args_str: Option<(&str, &str)> = match &self.input[self.i..][..8].find(')') {
-                Some(i) => &self.input[self.i..][..i].split_once(','),
+            let args_str: Option<(&str, &str)> = match &self.input[self.i..][..8].split_once(')') {
+                Some(args, _) => args.split_once(','),
                 _ => continue
             };
             let args_num = match args_str {
