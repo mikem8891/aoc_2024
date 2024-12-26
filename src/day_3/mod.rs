@@ -39,16 +39,18 @@ impl<'a> Iterator for Args<'a> {
     }
 }
 
-struct Arg_2<'a> {
+struct Arg2<'a> {
+    input: &'a str,
     args: Args<'a>,
     state: Args2State
+    i: usize
 }
 
 enum Args2State{
     Do, DoNot
 }
 
-impl<'a> Iterator for Arg_2<'a> {
+impl<'a> Iterator for Arg2<'a> {
     
     type Item = (u32,u32);
     
@@ -56,7 +58,10 @@ impl<'a> Iterator for Arg_2<'a> {
         loop {
             match self.state {
                 Args2State::Do => {
-
+                    match self.args.next() {
+                        Some(a) => return Some(a),
+                        None => 
+                    }
                 },
                 Args2State::DoNot => {
 
