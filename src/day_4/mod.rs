@@ -2,7 +2,7 @@ const DAY_NUM: &str = "4";
 
 use std::fmt::Display;
 
-const XMAS_FORWARD = 
+const XMAS_FORWARD: str = 
 "
 XMAS
 ";

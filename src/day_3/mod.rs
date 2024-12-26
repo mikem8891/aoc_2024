@@ -2,23 +2,23 @@ const DAY_NUM: &str = "3";
 
 use std::fmt::Display;
 
-struct Args {
-    input: &str,
+struct Args<'a> {
+    input: &'a str,
     i: usize
 }
 
-impl Iterator for Args {
+impl<'a> Iterator for Args<'a> {
     
-    type Item = Option<(u32,u32)>;
+    type Item = (u32,u32);
     
     fn next(&mut self) -> Option<(u32,u32)> {
         loop {
-            self.i = match &input[self.i..].find("mul(") {
+            self.i = match &self.input[self.i..].find("mul(") {
                 Some(i) => i + 4,
                 _ => return None
-            }
-            let args_str = match &input[self.i..][..8].find(')') {
-                Some(i) => &input[self.i..][..i].split_once(','),
+            };
+            let args_str: Option<(&str, &str)> = match &self.input[self.i..][..8].find(')') {
+                Some(i) => &self.input[self.i..][..i].split_once(','),
                 _ => continue
             };
             let args_num = match args_str {
@@ -28,19 +28,18 @@ impl Iterator for Args {
                     (n1, n2)
                 },
                 _ => continue
-            }
+            };
             match args_num {
-                (Ok(n1), Ok(n2)) => (n1, n2),
+                (Ok(n1), Ok(n2)) => return Some((n1, n2)),
                 _ => continue
             }
         }   
-        None
     }
 }
 
 fn solve(input: &str) -> (impl Display, impl Display) {
 
-    let sum = Args{input, i: 0}.map(|(n1, n2)| n1 * n2).sum();
+    let sum: u32= Args{input, i: 0}.map(|(n1, n2)| n1 * n2).sum();
 
     (sum, "todo")
 }
