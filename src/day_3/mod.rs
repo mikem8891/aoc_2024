@@ -39,41 +39,21 @@ impl<'a> Iterator for Args<'a> {
     }
 }
 
-struct Arg2<'a> {
-    input: &'a str,
-    args: Args<'a>,
-    state: Args2State
-    i: usize
-}
+impl<'a> Args<'a> {
+    fn new(input: &'a str) -> Self {
+        Args{input, i: 0}
+    }
 
-enum Args2State{
-    Do, DoNot
-}
-
-impl<'a> Iterator for Arg2<'a> {
-    
-    type Item = (u32,u32);
-    
-    fn next(&mut self) -> Option<(u32,u32)> {
-        loop {
-            match self.state {
-                Args2State::Do => {
-                    match self.args.next() {
-                        Some(a) => return Some(a),
-                        None => 
-                    }
-                },
-                Args2State::DoNot => {
-
-                }
-            }
-        }   
+    fn do_args(input: &'a str) -> impl Iterator {
+        while let Some((sub_input, the_rest)) = input.split_once("don't") {
+            
+        }
     }
 }
 
 fn solve(input: &str) -> (impl Display, impl Display) {
 
-    let sum: u32= Args{input, i: 0}.map(|(n1, n2)| n1 * n2).sum();
+    let sum: u32= Args::new(input).map(|(n1, n2)| n1 * n2).sum();
 
     (sum, "todo")
 }
