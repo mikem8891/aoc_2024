@@ -45,9 +45,15 @@ impl<'a> Args<'a> {
     }
 
     fn do_args(input: &'a str) -> impl Iterator {
-        while let Some((sub_input, the_rest)) = input.split_once("don't") {
-            
+        let mut args_vec = vec![];
+        let mut the_rest = input;
+        while !the_rest.is_empty() {
+            (let do_args, the_rest) = input.split_once("don't").unwrap_or((input, ""));
+            let args = Args::new(do_args).collect();
+            args_vec.push(args);
+            (_, the_rest) = the_rest.split_once("do").unwrap_or((the_rest, ""));
         }
+        args_vec.iter().flatten()
     }
 }
 
