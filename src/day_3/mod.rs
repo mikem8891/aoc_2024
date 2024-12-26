@@ -14,12 +14,14 @@ impl<'a> Iterator for Args<'a> {
     fn next(&mut self) -> Option<(u32,u32)> {
         loop {
             self.i = match &self.input[self.i..].find("mul(") {
-                Some(i) => i + 4,
-                _ => return None
+                Some(i) => {
+                    self.i + i + 4
+                },
+                None => {return None}
             };
-            let args_str: Option<(&str, &str)> = match &self.input[self.i..][..8].split_once(')') {
-                Some(args, _) => args.split_once(','),
-                _ => continue
+            let args_str: Option<(&str, &str)> = match &self.input[self.i..].split_once(')') {
+                Some((args, _)) => args.split_once(','),
+                None => continue
             };
             let args_num = match args_str {
                 Some((s1, s2)) => {
@@ -27,11 +29,38 @@ impl<'a> Iterator for Args<'a> {
                     let n2 = s2.parse::<u32>();
                     (n1, n2)
                 },
-                _ => continue
+                None => continue
             };
             match args_num {
                 (Ok(n1), Ok(n2)) => return Some((n1, n2)),
                 _ => continue
+            }
+        }   
+    }
+}
+
+struct Arg_2<'a> {
+    args: Args<'a>,
+    state: Args2State
+}
+
+enum Args2State{
+    Do, DoNot
+}
+
+impl<'a> Iterator for Arg_2<'a> {
+    
+    type Item = (u32,u32);
+    
+    fn next(&mut self) -> Option<(u32,u32)> {
+        loop {
+            match self.state {
+                Args2State::Do => {
+
+                },
+                Args2State::DoNot => {
+
+                }
             }
         }   
     }
