@@ -60,8 +60,9 @@ impl<'a> Args<'a> {
 fn solve(input: &str) -> (impl Display, impl Display) {
 
     let sum: u32= Args::new(input).map(|(n1, n2)| n1 * n2).sum();
+    let sum_2: u32= Args::do_args(input).map(|(n1, n2)| n1 * n2).sum();
 
-    (sum, "todo")
+    (sum, sum_2)
 }
 
 pub fn main() {
