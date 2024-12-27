@@ -44,13 +44,13 @@ impl<'a> Args<'a> {
         Args{input, i: 0}
     }
 
-    fn do_args(input: &'a str) -> impl Iterator<Item = (u32, u32)> {
+    fn do_args(input: &'a str) -> impl Iterator<Item = (u32, u32)> + 'a {
         let mut args_vec = vec![];
         let mut the_rest = input;
         while !the_rest.is_empty() {
             let do_args: &str;
             (do_args, the_rest) = the_rest.split_once("don't()").unwrap_or((the_rest, ""));
-            let args = Args::new(do_args).collect::<Vec<_>>();
+            let args = Args::new(do_args);
             args_vec.push(args);
             (_, the_rest) = the_rest.split_once("do()").unwrap_or((the_rest, ""));
         }
