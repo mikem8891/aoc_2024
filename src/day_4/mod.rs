@@ -81,18 +81,18 @@ impl Word {
         Word {letters, size}
     }
 
-    fn find_in_location(&self, word_search: &[&[u8]], (row_loc, col_loc): (usize, usize)) -> bool {
+    fn is_in_at(&self, word_search: &[&[u8]], (row_loc, col_loc): (usize, usize)) -> bool {
         self.letters.iter().all(|(l, (r, c))| *l == word_search[row_loc + r][col_loc + c])
     }
 
-    fn find_in(&self, word_search: &[&[u8]]) -> u32{
+    fn count_in(&self, word_search: &[&[u8]]) -> u32{
         let mut count = 0;
         let (size_row, size_col) = self.size;
         let (search_rows, search_cols) = 
             (word_search.len() - size_row, word_search[0].len() - size_col)
         for r in 0..=search_rows {
             for c in 0..=search_cols {
-                if self.find_in_location(word_search, (r, c)) {
+                if self.is_in_at(word_search, (r, c)) {
                     count += 1;
                 }
             }
@@ -103,10 +103,11 @@ impl Word {
 
 fn solve(input: &str) -> (impl Display, impl Display) {
     let word_search: Vec<_> = input.lines().map(str::as_bytes).collect();
+    let sum = XMAS_WORDS.iter()
+        .map(|w| Word::new(w).count_in(word_search)).sum();
     
     
-    
-    ("todo", "todo")
+    (sum, "todo")
 }
 
 pub fn main() {
