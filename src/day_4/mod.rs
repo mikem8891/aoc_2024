@@ -31,7 +31,10 @@ impl Word {
         Word {letters, size}
     }
 
-    
+    fn find_in_location(&self, word_search: &[&[u8]], (row_loc, col_loc): (usize, usize)) -> bool {
+        self.letters.iter().all(|(l, (r, c))| *l == word_search[row_loc + r][col_loc + c])
+    }
+
 }
 
 fn solve(input: &str) -> (impl Display, impl Display) {
