@@ -1,4 +1,4 @@
-const EXAMPLE_1: &str = "_";
+const EXAMPLE_1: &str = "41";
 const EXAMPLE_2: &str = "_";
 const PART_1: &str = include_str!("part_1.txt");
 const PART_2: &str = include_str!("part_2.txt");
