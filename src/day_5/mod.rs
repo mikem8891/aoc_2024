@@ -1,13 +1,16 @@
 const DAY_NUM: &str = "5";
 
-use std::fmt::Display;
+use std::{collections::{HashMap, HashSet}, fmt::Display};
 
 fn parse_input(input: &str) -> (Vec<(u8,u8)>, Vec<Vec<u8>>) {
     let mut rules = vec![];
     let mut updates = vec![];
     for line in input.lines() {
         if let Some(rule) = line.split_once('|') {
-            rules.push(rule);
+            let (left, right) = rule;
+            let left = left.parse::<u8>().unwrap();
+            let right = right.parse::<u8>().unwrap();
+            rules.push((left, right));
             continue;
         }
         let update: Vec<_> = line.split(',')
@@ -20,10 +23,34 @@ fn parse_input(input: &str) -> (Vec<(u8,u8)>, Vec<Vec<u8>>) {
     (rules, updates)
 }
 
+fn get_mid_num(nums: &[u8]) -> u8 {
+    nums[(nums.len() - 1) / 2]
+}
+
 fn solve(input: &str) -> (impl Display, impl Display) {
     let (rules, updates) = parse_input(input);
+    let mut rules_map = HashMap::new();
+    for (left, right) in rules {
+        let right_num_set = rules_map.entry(left).or_insert(HashSet::new());
+        right_num_set.insert(right);
+    }
+
+    let mut sum: u32 = 0;
+    'update: for update in updates {
+        let len = update.len();
+        for li in 0..len {
+            for ri in (li + 1)..len {
+                if let Some(right_num_set) = rules_map.get(&update[ri]) {
+                    if right_num_set.contains(&update[li]) {
+                        continue 'update;
+                    }
+                }
+            }
+        }
+        sum += get_mid_num(&update) as u32;
+    }
     
-    ("todo", "todo")
+    (sum, "todo")
 }
 
 pub fn main() {
