@@ -8,9 +8,9 @@ XMAS
 ";
 const XMAS_NW: &str = 
 "
-X
-.M
-..A
+X...
+.M..
+..A.
 ...S
 ";
 const XMAS_N: &str = 
@@ -23,9 +23,9 @@ S
 const XMAS_NE: &str = 
 "
 ...X
-..M
-.A
-S
+..M.
+.A..
+S...
 ";
 const XMAS_E: &str = 
 "
@@ -33,9 +33,9 @@ SAMX
 ";
 const XMAS_SE: &str = 
 "
-S
-.A
-..M
+S...
+.A..
+..M.
 ...X
 ";
 const XMAS_S: &str = 
@@ -48,14 +48,42 @@ X
 const XMAS_SW: &str = 
 "
 ...S
-..A
-.M
-X
+..A.
+.M..
+X...
 ";
-const XMAS_WORDS: [&str, 8] = [
+const XMAS_WORDS: [&str; 8] = [
     XMAS_W, XMAS_NW, XMAS_N, XMAS_NE,
     XMAS_E, XMAS_SE, XMAS_S, XMAS_SW
-]
+];
+
+const X_MAS_W: &str =
+"
+M.S
+.A.
+M.S
+";
+const X_MAS_N: &str =
+"
+M.M
+.A.
+S.S
+";
+const X_MAS_E: &str =
+"
+S.M
+.A.
+S.M
+";
+const X_MAS_S: &str =
+"
+S.S
+.A.
+M.M
+";
+const X_MAS_WORDS: [&str; 4] = [
+    X_MAS_W, X_MAS_N, X_MAS_E, X_MAS_S
+];
 
 struct Word {
     letters: Vec<(u8, (usize, usize))>,
@@ -66,7 +94,7 @@ impl Word {
     fn new(word: &str) -> Self {
         let mut letters = vec![];
         let (mut row_size, mut col_size) = (0, 0);
-        let word: Vec<_> = word.lines()
+        let word: Vec<_> = word.trim().lines()
             .map(str::as_bytes).collect();
         for (row, line) in word.iter().enumerate() {
             for (col, &letter) in line.iter().enumerate() {
@@ -89,7 +117,7 @@ impl Word {
         let mut count = 0;
         let (size_row, size_col) = self.size;
         let (search_rows, search_cols) = 
-            (word_search.len() - size_row, word_search[0].len() - size_col)
+            (word_search.len() - size_row, word_search[0].len() - size_col);
         for r in 0..=search_rows {
             for c in 0..=search_cols {
                 if self.is_in_at(word_search, (r, c)) {
@@ -103,11 +131,16 @@ impl Word {
 
 fn solve(input: &str) -> (impl Display, impl Display) {
     let word_search: Vec<_> = input.lines().map(str::as_bytes).collect();
-    let sum = XMAS_WORDS.iter()
-        .map(|w| Word::new(w).count_in(word_search)).sum();
+    let words: Vec<Word> = XMAS_WORDS.iter()
+        .map(|w| Word::new(w)).collect();
+    let sum: u32 = words.into_iter()
+        .map(|w| w.count_in(&word_search)).sum();
+    let x_mas_words: Vec<_> = X_MAS_WORDS.iter()
+        .map(|w| Word::new(w)).collect();
+    let sum_2: u32 = x_mas_words.into_iter()
+        .map(|w| w.count_in(&word_search)).sum();
     
-    
-    (sum, "todo")
+    (sum, sum_2)
 }
 
 pub fn main() {
