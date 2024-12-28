@@ -2,7 +2,7 @@ const DAY_NUM: &str = "5";
 
 use std::fmt::Display;
 
-fn parse_input(input: &str) -> (Vec<(u32,u32)>, Vec<Vec<u32>>) {
+fn parse_input(input: &str) -> (Vec<(u8,u8)>, Vec<Vec<u8>>) {
     let mut rules = vec![];
     let mut updates = vec![];
     for line in input.lines() {
@@ -11,7 +11,7 @@ fn parse_input(input: &str) -> (Vec<(u32,u32)>, Vec<Vec<u32>>) {
             continue;
         }
         let update: Vec<_> = line.split(',')
-            .filter_map(|s| s.parse::<u32>().ok())
+            .filter_map(|s| s.parse::<u8>().ok())
             .collect();
         if !update.is_empty() {
             updates.push(update);
@@ -21,6 +21,8 @@ fn parse_input(input: &str) -> (Vec<(u32,u32)>, Vec<Vec<u32>>) {
 }
 
 fn solve(input: &str) -> (impl Display, impl Display) {
+    let (rules, updates) = parse_input(input);
+    
     ("todo", "todo")
 }
 
