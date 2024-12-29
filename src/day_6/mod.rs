@@ -15,28 +15,45 @@ struct Gaurd {
 impl Gaurd {
     fn new(){}
 
-    fn walk_on_map<'a, T: DerefMut<Target = &'a mut [u8]>>(&mut self, map: &mut [T]) {
-        let get_map_at = |map, row, col| map.get(row).and_then(|r| r.get(col));
+    fn step_thru<'a, T: DerefMut<Target = &'a mut [u8]>>(&mut self, map: &mut [T]) {
+        use Direction as Dir;
+        
+        const OBS: Option<u8> = Some(b'#');
+        
+        let (row, col) = (self.row, self.col);
+        map[row][col] = b'X';
+        
+        let map_get = |row, col| map.get(row).and_then(|r| r.get(col));
         
         match self.dir {
-            Direction::Up => {
-                if get_map_at(map, self.row, self.col) == Some(b'#') {
-                    self.dir = Direction::Right;
+            Dir::Up => {
+                if map_get(row - 1, col) == OBS {
+                    self.dir = Dir::Right;
                 } else {
-                    map[self.row][self.col] = b'X';
                     self.row -= 1;
                 }
             },
-            Direction::Right => {
-                if map[self.row][self.col + 1] == b'#' {
-                    self.dir = Direction::Right;
+            Dir::Right => {
+                if map_get(row, col + 1) == OBS {
+                    self.dir = Dir::Down;
                 } else {
-                    self.col -= 1;
-                    map[self.row][self.col] = b'X';
+                    self.col += 1;
                 }
             },
-            Direction::Down => todo!(),
-            Direction::Left => todo!(),
+            Dir::Down => {
+                if map_get(row + 1, col) == OBS {
+                    self.dir = Dir::Left;
+                } else {
+                    self.row += 1;
+                }
+            },
+            Dir::Left => {
+                if map_get(row, col - 1) == OBS {
+                    self.dir = Dir::Up;
+                } else {
+                    self.col -= 1;
+                }
+            }
         }
     }
 }
