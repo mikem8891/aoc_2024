@@ -6,28 +6,28 @@ enum Direction {
     Up, Right, Down, Left
 }
 
-struct Gaurd {
-    row: usize,
-    col: usize,
+struct Guard {
+    row: isize,
+    col: isize,
     dir: Direction
 }
 
-impl Gaurd {
-    fn new<'a, T: Deref<Target = &'a[u8]>>(map: &[T]) -> Gaurd{
+impl Guard {
+    fn new<T: Deref<Target = [u8]>>(map: &[T]) -> Self{
         let (row, col) = find_start(&*map);
         let dir = Direction::Up;
-        Gaurd {row, col, dir}
+        Guard {row, col, dir}
     }
 
-    fn step_thru<'a, T: DerefMut<Target = &'a mut [u8]>>(&mut self, map: &mut [T]) {
+    fn step_thru<T: DerefMut<Target = [u8]>>(&mut self, map: &mut [T]) {
         use Direction as Dir;
         
         const OBS: Option<u8> = Some(b'#');
         
         let (row, col) = (self.row, self.col);
-        map[row][col] = b'X';
+        map[row as usize][col as usize] = b'X';
         
-        let map_get = |row, col| map.get(row).and_then(|r| r.get(col));
+        let map_get = |row, col| map.get(row as usize).and_then(|r: &T| r.get(col as usize).copied());
         
         match self.dir {
             Dir::Up => {
@@ -62,10 +62,10 @@ impl Gaurd {
     }
 }
 
-fn find_start<'a, T: Deref<Target = &'a[u8]>>(map: &[T]) -> (usize, usize) {
+fn find_start<T: Deref<Target = [u8]>>(map: &[T]) -> (isize, isize) {
     for (row, ref line) in map.iter().enumerate() {
         if let Some(col) = line.iter().position(|c| *c == b'^') {
-            return (row, col);
+            return (row as isize, col as isize);
         }
     }
     panic!("couldn't find the start");
@@ -73,18 +73,18 @@ fn find_start<'a, T: Deref<Target = &'a[u8]>>(map: &[T]) -> (usize, usize) {
 
 fn solve(input: &str) -> (impl Display, impl Display) {
     let mut map: Vec<_> = input.lines()
-        .map(|s| Box::from(s.as_bytes()))
+        .map(|s| Box::<[u8]>::from(s.as_bytes()))
         .collect();
-    let gaurd = Gaurd::new(&*map);
+    let mut guard = Guard::new(&map);
     
-    let row_range = 0..map.len();
-    let col_range = 0..map[0].len();
+    let row_range = 0..map.len() as isize;
+    let col_range = 0..map[0].len() as isize;
     
-    while row_range.contains(guard.row) && col_range.contains(guard.col) {
-        guard.step_thru(map);
+    while row_range.contains(&guard.row) && col_range.contains(&guard.col) {
+        guard.step_thru(&mut map);
     }
     
-    let dist_pos = map.iter().flatten().filter(|c| c == b'X').count();
+    let dist_pos = map.iter().flatten().filter(|c| **c == b'X').count();
 
     (dist_pos, "todo")
 }

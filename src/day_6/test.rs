@@ -1,5 +1,5 @@
 const EXAMPLE_1: &str = "41";
-const EXAMPLE_2: &str = "_";
+const EXAMPLE_2: &str = "6";
 const PART_1: &str = include_str!("part_1.txt");
 const PART_2: &str = include_str!("part_2.txt");
 
