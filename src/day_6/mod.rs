@@ -13,7 +13,11 @@ struct Gaurd {
 }
 
 impl Gaurd {
-    fn new(){}
+    fn new<'a, T: Deref<Target = &'a[u8]>>(map: &[T]) -> Gaurd{
+        let (row, col) = find_start(&*map);
+        let dir = Direction::Up;
+        Gaurd {row, col, dir}
+    }
 
     fn step_thru<'a, T: DerefMut<Target = &'a mut [u8]>>(&mut self, map: &mut [T]) {
         use Direction as Dir;
@@ -67,14 +71,11 @@ fn find_start<'a, T: Deref<Target = &'a[u8]>>(map: &[T]) -> (usize, usize) {
     panic!("couldn't find the start");
 }
 
-fn find_start<'a, T: Deref<Target = &'a[u8]>>(map: &[T]) -> (usize, usize)
-
 fn solve(input: &str) -> (impl Display, impl Display) {
-    let mut map: Vec<_> = input.lines().map(|s| Box::from(s.as_bytes())).collect();
-    let (row, col) = find_start(&*map);
-    use Direction as Dir;
-    let dir = Dir::Up;
-    let gaurd = Gaurd {row, col, dir};
+    let mut map: Vec<_> = input.lines()
+        .map(|s| Box::from(s.as_bytes()))
+        .collect();
+    let gaurd = Gaurd::new(&*map);
     
     'walking: loop {
 
