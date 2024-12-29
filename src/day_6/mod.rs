@@ -77,12 +77,16 @@ fn solve(input: &str) -> (impl Display, impl Display) {
         .collect();
     let gaurd = Gaurd::new(&*map);
     
-    'walking: loop {
-
+    let row_range = 0..map.len();
+    let col_range = 0..map[0].len();
+    
+    while row_range.contains(guard.row) && col_range.contains(guard.col) {
+        guard.step_thru(map);
     }
+    
+    let dist_pos = map.iter().flatten().filter(|c| c == b'X').count();
 
-
-    ("todo", "todo")
+    (dist_pos, "todo")
 }
 
 pub fn main() {
