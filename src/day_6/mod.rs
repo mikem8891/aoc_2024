@@ -15,21 +15,23 @@ struct Gaurd {
 impl Gaurd {
     fn new(){}
 
-    fn walk<'a, T: DerefMut<Target = &'a mut [u8]>>(&mut self, map: &mut [T]) {
+    fn walk_on_map<'a, T: DerefMut<Target = &'a mut [u8]>>(&mut self, map: &mut [T]) {
+        let get_map_at = |map, row, col| map.get(row).and_then(|r| r.get(col));
+        
         match self.dir {
             Direction::Up => {
-                if map[self.row - 1][self.col] == b'#' {
+                if get_map_at(map, self.row, self.col) == Some(b'#') {
                     self.dir = Direction::Right;
                 } else {
-                    self.row -= 1;
                     map[self.row][self.col] = b'X';
+                    self.row -= 1;
                 }
             },
             Direction::Right => {
                 if map[self.row][self.col + 1] == b'#' {
                     self.dir = Direction::Right;
                 } else {
-                    self.row -= 1;
+                    self.col -= 1;
                     map[self.row][self.col] = b'X';
                 }
             },
@@ -47,6 +49,8 @@ fn find_start<'a, T: Deref<Target = &'a[u8]>>(map: &[T]) -> (usize, usize) {
     }
     panic!("couldn't find the start");
 }
+
+fn find_start<'a, T: Deref<Target = &'a[u8]>>(map: &[T]) -> (usize, usize)
 
 fn solve(input: &str) -> (impl Display, impl Display) {
     let mut map: Vec<_> = input.lines().map(|s| Box::from(s.as_bytes())).collect();
