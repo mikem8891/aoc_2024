@@ -6,6 +6,7 @@ mod day_3;
 mod day_4;
 mod day_5;
 mod day_6;
+mod day_7;
 
 fn main() {
     println!("Hello, world!");
@@ -15,4 +16,5 @@ fn main() {
     day_4::main();
     day_5::main();
     day_6::main();
+    day_7::main();
 }
