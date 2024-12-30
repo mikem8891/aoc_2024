@@ -3,6 +3,7 @@ const DAY_NUM: &str = "7";
 use std::fmt::Display;
 
 
+#[derive(PartialEq, Clone, Copy)]
 enum Operator {
     Add, Multiply
 }
@@ -23,23 +24,23 @@ struct OperatorPurmutations {
 impl OperatorPurmutations {
     fn new(cal_vals: &[u64]) -> OperatorPurmutations {
         let len = cal_vals.len() - 1;
-        let ops: Box<[Operator]> = vec![Operator:Add; len];
+        let ops: Box<[Operator]> = Box::from(vec![Operator::Add; len]);
         OperatorPurmutations{ops}
     }
 }
 
 impl Iterator for OperatorPurmutations {
-    type Item = &[Operator];
+    type Item = Box<[Operator]>;
 
     fn next(&mut self) -> Option<Self::Item> {
         let mut i = 0;
         while (i < self.ops.len()) && (self.ops[i] == Operator::Multiply) {
             self.ops[i] = Operator::Add;
-            i =+ 1;
+            i += 1;
         }
         if i < self.ops.len() {
             self.ops[i] = Operator::Multiply;
-            Some(&self.ops)
+            Some(self.ops.clone())
         } else {
             None
         }
@@ -54,13 +55,13 @@ trait CalibrationEquation{
 impl CalibrationEquation for Vec<u64> {
     fn can_result_in(&self, cal_result: u64) -> bool {
         let mut op_perms = OperatorPurmutations::new(self);
-        op_perms.any(|o| self.evaluate_with(o) == cal_result)
+        op_perms.any(|o| self.evaluate_with(&o) == cal_result)
     }
     
     fn evaluate_with(&self, cal_ops: &[Operator]) -> u64 {
         let mut cal_result = self[0];
-        for (op, val) in cal_ops.iter().zip(self[1..]) {
-            cal_result = op.eval(cal_result, val);
+        for (op, val) in cal_ops.iter().zip(&self[1..]) {
+            cal_result = op.eval(cal_result, *val);
         }
         cal_result
     }
