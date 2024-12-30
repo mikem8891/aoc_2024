@@ -18,14 +18,15 @@ impl Operator {
 }
 
 struct OperatorPurmutations {
-    ops: Box<[Operator]>
+    ops: Box<[Operator]>,
+    started: bool
 }
 
 impl OperatorPurmutations {
     fn new(cal_vals: &[u64]) -> OperatorPurmutations {
         let len = cal_vals.len() - 1;
         let ops: Box<[Operator]> = Box::from(vec![Operator::Add; len]);
-        OperatorPurmutations{ops}
+        OperatorPurmutations{ops, started: false}
     }
 }
 
@@ -33,6 +34,10 @@ impl Iterator for OperatorPurmutations {
     type Item = Box<[Operator]>;
 
     fn next(&mut self) -> Option<Self::Item> {
+        if !self.started {
+            self.started = true;
+            return Some(self.ops.clone())
+        }
         let mut i = 0;
         while (i < self.ops.len()) && (self.ops[i] == Operator::Multiply) {
             self.ops[i] = Operator::Add;
