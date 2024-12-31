@@ -1,20 +1,21 @@
 const DAY_NUM: &str = "8";
 
-use std::fmt::Display;
+use std::{collections::{HashMap, HashSet}, fmt::Display};
 
-fn enumerate2D(input: &str) -> impl Iterater {
-    let enumerate_line = |r: usize, l: &str| {
-        l.as_bytes().enumerate().map(|(c, b)| ((r, c), b))
-    };
-    input.line().enumerate()
-        .map(|(r,l)| enumerate_line(r, l)).flatten()
+fn enumerate2D<'a>(input: &str) -> impl Iterator<Item = ((usize, usize), u8)> + '_ {
+    input.lines().enumerate()
+        .map(|(r,l)| 
+            l.as_bytes().iter().enumerate()
+                .map(move |(c, &b)| ((r, c), b))).flatten()
 }
 
-
 fn solve(input: &str) -> (impl Display, impl Display) {
-    let ant_iter = enumerate2D(input).filter(|p, b| b != b'.');
-    let ant_map = HashMap::new();
-    ant_iter.map(|(p, b)| ant_map.entry(b))
+    let ant_iter = enumerate2D(input)
+        .filter(|(p, b)| *b != b'.');
+    let mut ant_map = HashMap::new();
+    ant_iter.for_each(|(p, b)| {
+            ant_map.entry(b).or_insert(HashSet::new()).insert(p);
+    });
     
     ("todo", "todo")
 }
