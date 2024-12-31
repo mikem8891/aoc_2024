@@ -14,7 +14,7 @@ fn solve(input: &str) -> (impl Display, impl Display) {
         .filter(|(p, b)| *b != b'.');
     let mut ant_map = HashMap::new();
     ant_iter.for_each(|(p, b)| {
-            ant_map.entry(b).or_insert(HashSet::new()).insert(p);
+            ant_map.entry(b).or_insert(vec![]).push(p);
     });
     
     ("todo", "todo")
