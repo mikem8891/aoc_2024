@@ -2,7 +2,20 @@ const DAY_NUM: &str = "8";
 
 use std::fmt::Display;
 
+fn enumerate2D(input: &str) -> impl Iterater {
+    let enumerate_line = |r: usize, l: &str| {
+        l.as_bytes().enumerate().map(|(c, b)| ((r, c), b))
+    };
+    input.line().enumerate()
+        .map(|(r,l)| enumerate_line(r, l)).flatten()
+}
+
+
 fn solve(input: &str) -> (impl Display, impl Display) {
+    let ant_iter = enumerate2D(input).filter(|p, b| b != b'.');
+    let ant_map = HashMap::new();
+    ant_iter.map(|(p, b)| ant_map.entry(b))
+    
     ("todo", "todo")
 }
 
